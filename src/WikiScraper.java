@@ -17,6 +17,7 @@ public class WikiScraper {
         Scanner scan = new Scanner(System.in);
         System.out.println("Input your Boxer's Wikipedia URL");
         final String url = scan.nextLine();
+        scan.close();
         try {
             final Document doc = Jsoup.connect(url).get();
             final Elements rows = doc.select("table.wikitable tr");
