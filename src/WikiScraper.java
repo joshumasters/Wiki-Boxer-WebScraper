@@ -15,15 +15,18 @@ import org.jsoup.select.Elements;
 
 public class WikiScraper {
     public static void main(String[] args) {
+        //Creates main entry list, takes in user input
         ArrayList<FightEntry> entries = new ArrayList<>();
         Scanner scan = new Scanner(System.in);
         System.out.println("Input your Boxer's Wikipedia URL");
         final String url = scan.nextLine();
         scan.close();
+        //Connects Jsoup to url and parses HTML
         try {
             final Document doc = Jsoup.connect(url).get();
             final Elements rows = doc.select("table.wikitable tr");
             final String title = doc.select("title").text();
+            //Saves table elements to entry list.
             for (Element row : rows) {
                 Elements items = row.select("td");
                 if(items.size() == 9){
@@ -31,6 +34,7 @@ public class WikiScraper {
                     entries.add(entry);
                 }
             }
+            //Creates workbook and formats to save data
             Workbook book = new XSSFWorkbook();
             Sheet sheet = book.createSheet("FightEntries");
             String[] headings = {"Fight Number", "Fight Result", "Current Record", "Opponent", "Result Type", "Round/Time", "Date", "Location", "Notes"};
@@ -40,6 +44,7 @@ public class WikiScraper {
                 cell.setCellValue(headings[i]);
             }
             int rowNum = 1;
+            //Adds each entry field to a workbook cell
             for(FightEntry entry : entries){
                 Row row = sheet.createRow(rowNum++);
                 row.createCell(0).setCellValue(entry.getFightNum());
@@ -52,10 +57,12 @@ public class WikiScraper {
                 row.createCell(7).setCellValue(entry.getLocation());
                 row.createCell(8).setCellValue(entry.getNotes());
             }
+            //Adds dynamic workbook formatting
             sheet.createFreezePane(0, 1);
             for (int i = 0; i < headings.length; i++) {
                 sheet.autoSizeColumn(i);
             }
+            //Writes to spreadsheet file
             FileOutputStream fileOut = new FileOutputStream("/Users/joshuamasters724/Documents/Programming/Spreadsheets/" + title + ".xlsx");
             book.write(fileOut);
             fileOut.close();
