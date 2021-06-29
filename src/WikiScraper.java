@@ -37,7 +37,7 @@ public class WikiScraper {
             //Creates workbook and formats to save data
             Workbook book = new XSSFWorkbook();
             Sheet sheet = book.createSheet("FightEntries");
-            String[] headings = {"Fight Number", "Fight Result", "Current Record", "Opponent", "Result Type", "Round/Time", "Date", "Location", "Notes"};
+            String[] headings = {"Fight Number", "Current Record", "Fight Result", "Opponent", "Result Type", "Round/Time", "Date", "Location", "Notes"};
             Row header = sheet.createRow(0);
             for (int i = 0; i < headings.length; i++) {
                 Cell cell = header.createCell(i);
